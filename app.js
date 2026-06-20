@@ -282,7 +282,8 @@ function App() {
   else if (screen === "rules") body = (<RulesScreen errItems={errorItems()} onBack={() => setScreen("home")} />);
   else if (screen === "cours") body = (<CoursHome onBack={() => setScreen("home")} onOpen={(id) => { setLessonId(id); setScreen("lesson"); }} />);
   else if (screen === "lesson") body = (<LessonScreen lesson={LESSONS.find((l) => l.id === lessonId)} onBack={() => setScreen("cours")} onPractice={(cat) => start({ focusCat: cat, returnScreen: "lesson" })} />);
-  else if (screen === "ref") body = (<ConjHome conj={conjStats()} onBack={() => setScreen("home")} onOpenVerb={(inf) => { setVerbInf(inf); setScreen("verb"); }} onReview={() => startWeakTables()} />);
+  else if (screen === "ref") body = (<ConjHome conj={conjStats()} onBack={() => setScreen("home")} onOpenVerb={(inf) => { setVerbInf(inf); setScreen("verb"); }} onReview={() => startWeakTables()} onOpenIrregular={() => setScreen("irregular")} />);
+  else if (screen === "irregular") body = (<IrregularScreen onBack={() => setScreen("ref")} />);
   else if (screen === "verb") {
     const v = VERBS.find((x) => x.base === verbInf); const ts = {};
     if (v) DRILL_TENSES.forEach((t) => { const p = progress.items["vt:" + v.base + ":" + t]; ts[t] = (p && p.streak) || 0; });
@@ -304,10 +305,26 @@ function Stat({ value, label, accent }) {
 }
 
 function Home({ counts, conj, stats, settings, focus, setFocus, onStart, errorCount, onReview, onLength, onToggleAudio, onReset, onOpenRef, onOpenCours, onOpenRules }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const streak = stats.streak || 0;
   const pct = counts.total ? Math.round((counts.mastered / counts.total) * 100) : 0;
   return (
     <div className="screen">
+      <button className="menu-btn" onClick={() => setMenuOpen(true)} aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+      {menuOpen && (
+        <div className="menu-overlay" onClick={() => setMenuOpen(false)}>
+          <nav className="menu-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="menu-head"><span className="menu-title">Mes applis</span><button className="menu-close" onClick={() => setMenuOpen(false)} aria-label="Fermer">×</button></div>
+            {APPS.map((a, i) => a.href ? (
+              <a key={i} className="menu-item" href={a.href}><span className="menu-item-name">{a.name}</span>{a.note && <span className="menu-item-note">{a.note}</span>}</a>
+            ) : (
+              <div key={i} className="menu-item menu-item-soon"><span className="menu-item-name">{a.name}</span><span className="menu-item-note">{a.note || "à venir"}</span></div>
+            ))}
+          </nav>
+        </div>
+      )}
       <header className="masthead">
         <span className="eyebrow">Cahier d’anglais</span>
         <h1 className="logo">The Workbook</h1>
@@ -424,7 +441,7 @@ function LessonScreen({ lesson, onBack, onPractice }) {
   );
 }
 
-function ConjHome({ conj, onBack, onOpenVerb, onReview }) {
+function ConjHome({ conj, onBack, onOpenVerb, onReview, onOpenIrregular }) {
   const groups = [
     { title: "Verbes réguliers", note: "type « work / play »", verbs: VERBS.filter((v) => v.group === 1) },
     { title: "Verbes irréguliers", note: "à mémoriser", verbs: VERBS.filter((v) => v.group === 2) },
@@ -435,6 +452,11 @@ function ConjHome({ conj, onBack, onOpenVerb, onReview }) {
       <button className="back" onClick={onBack}>← Accueil</button>
       <header className="masthead"><span className="eyebrow">Verbes &amp; temps</span><h1 className="logo-sm">Tableaux des verbes anglais</h1></header>
       <p className="verb-hint">Ouvrez un verbe pour réviser ses temps et savoir quand les employer. Pour vous exercer, vous compléterez un tableau entier (les six personnes) — il n’est validé que si toutes les cases sont justes.</p>
+      <button className="btn-zone zone-irr" onClick={onOpenIrregular}>
+        <span className="zone-label">Verbes irréguliers</span>
+        <span className="zone-sub">Le tableau complet : base · prétérit · participe passé + traduction</span>
+        <span className="zone-meta">{IRREGULARS.length} verbes</span>
+      </button>
       {conj.reviewable > 0 && (<button className="btn-primary lesson-practice" style={{ marginTop: 0, marginBottom: 18 }} onClick={onReview}>Réviser les tableaux à revoir ({conj.reviewable})</button>)}
       {groups.map((g, i) => (
         <div key={i} className="vgroup">
@@ -496,6 +518,49 @@ function VerbScreen({ v, conj, tenseStreak, onBack, onExercise }) {
         );
       })}
       <button className="btn-primary verb-drill" onClick={onExercise}>S’exercer : compléter les tableaux →</button>
+    </div>
+  );
+}
+
+function IrregularScreen({ onBack }) {
+  const [info, setInfo] = useState(null);
+  const COLS = [
+    { key: "base", label: "Base", when: "La forme de base (l’infinitif sans « to »). On l’emploie au présent simple (I / you / we / they go), après « to » (to go), après les modaux (can / will / must go), dans les questions et négations avec do / does / did (Did you go ? — I don’t go) et à l’impératif (Go!)." },
+    { key: "past", label: "Prétérit", when: "Le passé simple : une action terminée dans le passé, souvent avec yesterday, last week, ago — « I went home yesterday ». (Attention : avec « did », on revient à la base : Did you go ?)" },
+    { key: "pp", label: "Participe passé", when: "S’emploie avec un auxiliaire : present perfect (have / has + pp — « I have gone »), past perfect (« had gone ») et le passif (« it was written »). Sert aussi d’adjectif (« a broken window »)." },
+  ];
+  const cur = info ? COLS.find((c) => c.key === info) : null;
+  return (
+    <div className="screen">
+      <button className="back" onClick={onBack}>← Tableaux</button>
+      <header className="masthead"><span className="eyebrow">Verbes irréguliers</span><h1 className="logo-sm">Base · prétérit · participe</h1></header>
+      <p className="verb-hint">Touchez l’en-tête d’une colonne (le « ? ») pour savoir quand employer cette forme. L’en-tête reste visible quand vous faites défiler.</p>
+      <div className="irr-table">
+        <div className="irr-head">
+          {COLS.map((c) => (
+            <button key={c.key} className={"irr-col-h" + (info === c.key ? " irr-col-on" : "")} onClick={() => setInfo(info === c.key ? null : c.key)}>
+              {c.label}<span className="irr-q">?</span>
+            </button>
+          ))}
+          <div className="irr-col-h irr-col-fr">Traduction</div>
+        </div>
+        {cur && (
+          <div className="irr-info">
+            <p className="irr-info-h">{cur.label}</p>
+            <p className="irr-info-p">{cur.when}</p>
+          </div>
+        )}
+        <div className="irr-body">
+          {IRREGULARS.map((v, i) => (
+            <div key={i} className="irr-row">
+              <span className="irr-cell irr-base">{v.base}</span>
+              <span className="irr-cell">{v.past}</span>
+              <span className="irr-cell">{v.pp}</span>
+              <span className="irr-cell irr-fr">{v.fr}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
