@@ -848,35 +848,3 @@ function RulesScreen({ errItems, onBack }) {
 
 /* =============================== MONTAGE ============================== */
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-
-function AppMenu({ onClose }) {
-  const apps = [
-    { name: "L’Atelier", desc: "Français — orthographe & conjugaison", here: true },
-    { name: "CoachMuscu", desc: "Programme de musculation", href: "https://ricardospec.github.io/coachmuscu/" },
-    { name: "Anglais", desc: "À venir", soon: true },
-    { name: "Espagnol", desc: "À venir", soon: true },
-    { name: "Suivi du mémoire", desc: "À venir", soon: true },
-  ];
-  return (
-    <div className="menu-overlay" onClick={onClose}>
-      <div className="menu-panel" onClick={(e) => e.stopPropagation()}>
-        <div className="menu-head">
-          <span className="menu-title">Mes applications</span>
-          <button className="menu-close" aria-label="Fermer" onClick={onClose}>×</button>
-        </div>
-        <div className="menu-list">
-          {apps.map((a, i) => {
-            const inner = (<span className="menu-item-text"><span className="menu-item-name">{a.name}</span><span className="menu-item-desc">{a.desc}</span></span>);
-            if (a.here) return (<div key={i} className="menu-item menu-here">{inner}<span className="menu-badge">ici</span></div>);
-            if (a.soon) return (<div key={i} className="menu-item menu-soon">{inner}</div>);
-            return (<a key={i} className="menu-item menu-link" href={a.href}>{inner}<span className="menu-arrow">→</span></a>);
-          })}
-        </div>
-        <p className="menu-foot">D’autres apps arriveront ici.</p>
-      </div>
-    </div>
-  );
-}
-
-/* =============================== MONTAGE ============================== */
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
