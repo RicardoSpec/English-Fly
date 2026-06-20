@@ -213,3 +213,83 @@ const LESSONS = [
 
 /* Exposition globale : rend les données accessibles depuis app.js (script Babel). */
 Object.assign(window, { BANK, PRON, BE_PRES, BE_PAST, HAVE_PRES, TENSE_LABEL, TENSE_USAGE, DISPLAY_TENSES, DRILL_TENSES, VERBS, LESSONS });
+
+
+/* =================== VERBES IRRÉGULIERS (tableau de référence) ===================
+   base · prétérit · participe passé · traduction française de l'infinitif. */
+const IRREGULARS = [
+  { base: "be", past: "was / were", pp: "been", fr: "être" },
+  { base: "become", past: "became", pp: "become", fr: "devenir" },
+  { base: "begin", past: "began", pp: "begun", fr: "commencer" },
+  { base: "break", past: "broke", pp: "broken", fr: "casser" },
+  { base: "bring", past: "brought", pp: "brought", fr: "apporter" },
+  { base: "build", past: "built", pp: "built", fr: "construire" },
+  { base: "buy", past: "bought", pp: "bought", fr: "acheter" },
+  { base: "catch", past: "caught", pp: "caught", fr: "attraper" },
+  { base: "choose", past: "chose", pp: "chosen", fr: "choisir" },
+  { base: "come", past: "came", pp: "come", fr: "venir" },
+  { base: "cost", past: "cost", pp: "cost", fr: "coûter" },
+  { base: "cut", past: "cut", pp: "cut", fr: "couper" },
+  { base: "do", past: "did", pp: "done", fr: "faire" },
+  { base: "draw", past: "drew", pp: "drawn", fr: "dessiner" },
+  { base: "drink", past: "drank", pp: "drunk", fr: "boire" },
+  { base: "drive", past: "drove", pp: "driven", fr: "conduire" },
+  { base: "eat", past: "ate", pp: "eaten", fr: "manger" },
+  { base: "fall", past: "fell", pp: "fallen", fr: "tomber" },
+  { base: "feel", past: "felt", pp: "felt", fr: "(se) sentir" },
+  { base: "find", past: "found", pp: "found", fr: "trouver" },
+  { base: "fly", past: "flew", pp: "flown", fr: "voler" },
+  { base: "forget", past: "forgot", pp: "forgotten", fr: "oublier" },
+  { base: "get", past: "got", pp: "got", fr: "obtenir" },
+  { base: "give", past: "gave", pp: "given", fr: "donner" },
+  { base: "go", past: "went", pp: "gone", fr: "aller" },
+  { base: "grow", past: "grew", pp: "grown", fr: "grandir / pousser" },
+  { base: "have", past: "had", pp: "had", fr: "avoir" },
+  { base: "hear", past: "heard", pp: "heard", fr: "entendre" },
+  { base: "hold", past: "held", pp: "held", fr: "tenir" },
+  { base: "keep", past: "kept", pp: "kept", fr: "garder" },
+  { base: "know", past: "knew", pp: "known", fr: "savoir / connaître" },
+  { base: "leave", past: "left", pp: "left", fr: "partir / laisser" },
+  { base: "lose", past: "lost", pp: "lost", fr: "perdre" },
+  { base: "make", past: "made", pp: "made", fr: "fabriquer / faire" },
+  { base: "mean", past: "meant", pp: "meant", fr: "signifier" },
+  { base: "meet", past: "met", pp: "met", fr: "rencontrer" },
+  { base: "pay", past: "paid", pp: "paid", fr: "payer" },
+  { base: "put", past: "put", pp: "put", fr: "mettre" },
+  { base: "read", past: "read", pp: "read", fr: "lire" },
+  { base: "ride", past: "rode", pp: "ridden", fr: "monter (à vélo/cheval)" },
+  { base: "ring", past: "rang", pp: "rung", fr: "sonner" },
+  { base: "run", past: "ran", pp: "run", fr: "courir" },
+  { base: "say", past: "said", pp: "said", fr: "dire" },
+  { base: "see", past: "saw", pp: "seen", fr: "voir" },
+  { base: "sell", past: "sold", pp: "sold", fr: "vendre" },
+  { base: "send", past: "sent", pp: "sent", fr: "envoyer" },
+  { base: "sing", past: "sang", pp: "sung", fr: "chanter" },
+  { base: "sit", past: "sat", pp: "sat", fr: "s'asseoir" },
+  { base: "sleep", past: "slept", pp: "slept", fr: "dormir" },
+  { base: "speak", past: "spoke", pp: "spoken", fr: "parler" },
+  { base: "spend", past: "spent", pp: "spent", fr: "dépenser / passer (du temps)" },
+  { base: "stand", past: "stood", pp: "stood", fr: "être debout / supporter" },
+  { base: "swim", past: "swam", pp: "swum", fr: "nager" },
+  { base: "take", past: "took", pp: "taken", fr: "prendre" },
+  { base: "teach", past: "taught", pp: "taught", fr: "enseigner" },
+  { base: "tell", past: "told", pp: "told", fr: "raconter / dire" },
+  { base: "think", past: "thought", pp: "thought", fr: "penser" },
+  { base: "throw", past: "threw", pp: "thrown", fr: "lancer / jeter" },
+  { base: "understand", past: "understood", pp: "understood", fr: "comprendre" },
+  { base: "wake", past: "woke", pp: "woken", fr: "(se) réveiller" },
+  { base: "wear", past: "wore", pp: "worn", fr: "porter (vêtement)" },
+  { base: "win", past: "won", pp: "won", fr: "gagner" },
+  { base: "write", past: "wrote", pp: "written", fr: "écrire" },
+];
+
+/* =================== MENU : autres applications ===================
+   href absent = « à venir » (non cliquable). Mets à jour les URL ici. */
+const APPS = [
+  { name: "Musculation", note: "coachmuscu", href: "https://ricardospec.github.io/coachmuscu/" },
+  { name: "Français", note: "L'Atelier — orthographe & conjugaison", href: "https://ricardospec.github.io/Lateliergram/" },
+  { name: "Espagnol", note: "à venir" },
+  { name: "Suivi du mémoire", note: "à venir" },
+];
+
+Object.assign(window, { IRREGULARS, APPS });
