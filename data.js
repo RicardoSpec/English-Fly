@@ -290,6 +290,7 @@ const APPS = [
   { name: "Français", note: "L'Atelier — orthographe & conjugaison", href: "https://ricardospec.github.io/Lateliergram/" },
   { name: "Espagnol", note: "à venir" },
   { name: "Suivi du mémoire", note: "DSCG", href: "https://ricardospec.github.io/Mouche-Universit-/" },
+  { name: "Budgétisation", note: "budget prévisionnel", href: "https://ricardospec.github.io/Budgetisation/" },
 ];
 
 Object.assign(window, { IRREGULARS, APPS });
